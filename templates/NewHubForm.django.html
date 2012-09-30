@@ -1,0 +1,117 @@
+{% extends 'MainPage.django.html' %}
+{% block css %}
+<!--<link href="/css/dragdealer.css" rel="stylesheet" type="text/css" />-->
+{% endblock %}
+
+{% block javascript %}
+<!--<script type="text/javascript" src="/js/dragdealer.js"></script>-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="/js/gmap.js"></script>
+<script type="text/javascript">
+    var default_location = new google.maps.LatLng({{ lat }}, {{ lng }});
+    
+    function sendForm() {
+        //TODO: check name
+        //TODO: check ...
+        $("#lat").val(hubMarker.position.lat());
+        $("#lng").val(hubMarker.position.lng());
+        return true;
+    }
+
+    var documentReady = function () {
+        $("#autolocation-box").click(function(event) { Map.autolocate(); });
+
+        /* setup location search box */
+        ls = $("#location_search");
+        ls.keypress(function(event) {
+            if (event.keyCode == '13') {
+                event.preventDefault();
+                Map.findAddress(MapSelectLocation.FoundAddress);
+            }
+        });
+        ls.focusin(function (){ if (ls.val()=="Search ...") ls.val(""); });
+        ls.focusout(function (){ if (ls.val()=="") ls.val("Search ..."); });
+
+        $("#new-hub-form").submit(function() {    return sendForm();});
+	    $("#new-hub").mousedown( function() {     $("#new-hub-form").submit(); });
+
+	    setTimeout("Map.Initialize('map_canvas'); MapSelectLocation.InitMarker();",100);
+    };
+
+    $(document).ready(documentReady);
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+<div class="block">
+        
+<form id="new-hub-form" action="" method="POST">
+    <div class="border">
+        <h1>- CREATE A NEW HUB -</h1>
+        <br/>
+
+        <h2>NAME</h2>
+        <input class="input-text" type="text" name="hub-name" id="hub-name" value=""/>
+
+        <div class="ic"></div>
+        <div class="info">Choose a name that reflects the goal of your organisation.</div>
+
+        <br/>
+        <br/>
+
+        <h2>TYPE</h2>
+        <input class="input-text" type="text" name="hub-type" id="hub-type" value=""/>
+
+        <div class="ic"></div>
+        <div class="info">Organisation, Association, Institution, Political Party, Protest, Community</div>
+
+        <br/>
+        <br/>
+
+        <h2>LOCATION</h2>
+        <input class="input-text" type="text" name="email" id="location" value=""/>
+
+        <div class="ic"></div>
+        <div class="info">Global, Country, Local</div>
+
+        <!-- start location -->
+        <input type="hidden" id="lat" name="lat" value="{{ lat }}"/>
+        <input type="hidden" id="lng" name="lng" value="{{ lng }}"/>
+
+        <div>
+
+            <div id="search-location-box">
+                <input type="text" name="location_search" id="location_search"
+                       value="Search ..."/>
+                <br/>
+                <small>Enter Country, City or Street. Press Enter.</small>
+            </div>
+
+            <div id="autolocation-box">
+                <div class="al-button-shadow"></div>
+                <div class="al-button">Autodetect Location</div>
+                <small>You can try autodetecting your location.</small>
+            </div>
+
+            <div id="mapborder">
+                <div id="map_canvas"></div>
+            </div>
+        </div>
+        <!-- end location -->
+
+        <br/>
+        <br/>
+
+        <h2>MEMBERSHIP TRUST LEVEL</h2>
+        Open | Trust Level <br/>
+
+        <br/>
+        <br/>
+        <div id="new-hub" class="button"><h1>NEW HUB</h1></div>
+
+    </div>
+</form>
+</div>
+{% endblock %}

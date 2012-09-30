@@ -1,0 +1,67 @@
+<div class="separator"></div>
+<div class="row">
+    <div class="third">
+        <h2>TRUSTED</h2>
+        {% for ego in trusted_egos %}
+                <div id="ego-{{ ego.key.id }}" class="ego">
+                     <div class="select-ego">{{ ego.name }}</div>
+                     <div class="trust-ego" trust="1">Trust</div> |
+                     <div class="trust-ego" trust="0">Neutral</div> |
+                     <div class="trust-ego" trust="x">Black List</div> |
+                     <div class="subscribe-ego" subscribe="1">Follow</div> |
+                     <div class="subscribe-ego" subscribe="0">Unsubscribe</div> |
+                     <div class="subscribe-ego" subscribe="x">Mute</div> |
+                </div>
+        {% empty %}
+        -
+        {% endfor %}
+    </div>
+
+    <div class="third">
+        <h2>NEUTRAL</h2>
+        {% for ego in subscribed_egos %}
+                <div id="ego-{{ ego.key.id }}" class="ego">
+                     <div class="select-ego">{{ ego.name }}</div>
+                     <div class="trust-ego" trust="1">Trust</div> |
+                     <div class="trust-ego" trust="0">Break Trust</div> |
+                     <div class="trust-ego" trust="-1">Black List</div>
+                </div>
+        {% empty %}
+        -
+        {% endfor %}
+    </div>
+    
+    <div class="third">
+        <h2>BLACK LIST</h2>
+        {% for ego in blacklisted_egos %}
+                <div id="ego-{{ ego.key.id }}" class="ego">
+                     <div class="select-ego">{{ ego.name }}</div>
+                     <div class="trust-ego" trust="1">Trust</div> |
+                     <div class="trust-ego" trust="0">Break Trust</div> |
+                     <div class="trust-ego" trust="-1">Black List</div>
+                </div>
+        {% empty %}
+        -
+        {% endfor %}
+    </div>
+
+
+</div>
+
+
+<h2>ALL EGOS</h2>
+{% for ego in all_egos %}
+            <div id="ego-{{ ego.key.id }}" class="ego">
+                 <div class="select-ego">{{ ego.name }}</div>
+                 <div class="trust-ego" trust="x">-</div> |
+                 <div class="trust-ego" trust="0">0</div> |
+                 <div class="trust-ego" trust="1">+</div> |
+                 <div class="subscribe-ego" subscribe="1">Follow</div> |
+                 <div class="subscribe-ego" subscribe="0">Unsubscribe</div> |
+                 <div class="subscribe-ego" subscribe="x">Mute</div> |
+            </div>
+{% empty %}
+No Egos
+{% endfor %}
+
+

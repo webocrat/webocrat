@@ -1,0 +1,237 @@
+html, body {
+        height:100%;
+	    margin: 0; padding: 0;
+}
+
+body {
+        background:url(img/bkg.png) repeat;
+        min-width: 626px;
+        min-height: 400px;
+}
+
+body,td,th {
+	font-family: 'PT Sans Narrow', Helvetica, Arial,sans-serif;
+    text-shadow: #fff 0 1px;
+    line-height: 1.6;
+    font-weight: normal;
+}
+
+
+p {    color: #3f3f3f; }
+
+a {    color: #0189bb; }
+a:hover {
+    background-color: #0189bb;
+    color: #fff;
+    text-shadow: none;
+}
+
+h1, h2 { color: #5a5a5a; margin: 5px 0 5px 0;}
+
+#webocrat-logo {        background: url(img/wlogo.png) no-repeat;    width:204px;    height:271px; display: inline-block;}
+#webocrat-logo.logoup { height:80px; background-position-y: -190px;}
+
+#plus {
+    position:absolute;
+    top:0;
+    right:0;
+    width:110px;
+    text-align:center;
+    padding:10px;
+    /*display:block;*/
+}
+
+.block {
+    width: 960px;
+    margin: 0 auto;
+}
+
+.centered {   text-align: center;}
+
+.row {
+    display: table-row;
+    width:100%;
+}
+.third {
+    width:30%;
+    display: table-cell;
+    padding-right: 30px;
+    text-align: justify;
+}
+
+.cell {
+    display: table-cell;
+}
+
+
+
+/* forms */
+
+form {
+    border-top: 2px #fff solid;
+    background: url(img/form_background.png);
+    box-shadow: 0 0 40px #d3d3d3;
+    padding: 15px;
+}
+
+.border {
+    padding: 50px;
+    border: 1px solid #ddd;
+}
+
+.button {
+    display: inline-block;
+    background: #333;
+    padding: 5px 20px 5px 20px;
+    right: 0;
+    cursor: pointer;
+}
+
+.button h1 {
+    padding: 0;
+    margin: 0;
+    color: #fff;
+}
+
+/* end form */
+
+
+
+/* http://www.google.com/webfonts#UsePlace:use/Collection:Lekton:400,700|Cousine|Anonymous+Pro|Droid+Sans+Mono|Oswald|La+Belle+Aurore|PT+Sans+Narrow|Droid+Sans|Special+Elite|Inconsolata */
+
+/* input */
+input {
+    font-family: 'Lekton', Courier, monospace;
+	font-size:18px;
+	color:#000;
+    margin: 0;
+    display: inline-block;
+}
+
+input:focus {
+    outline: none;
+}
+
+.input-text {
+    width: 400px;
+    height: 26px;
+    padding:10px 14px 5px 14px;
+    background:url(img/input_dot.png) repeat-x bottom left;
+    border:#5a5a5a solid;
+    border-width: 0 0 2px 2px;
+}
+
+.ic { /* lower right line after input */
+    width: 0; height:20px;
+    border-right: #5a5a5a solid 4px;
+    margin: 0 0 -15px -4px;
+    display: inline-block;
+}
+
+.info {
+    background: #fcf357;
+    background:url(img/info_bkg_yellow.png) repeat-x;
+    padding: 3px 16px 3px 16px;
+    font-family: Helvetica, Arial, sans-serif;   font-size: 15px;
+    color: #777;
+}
+
+/* end input */
+
+/* textarea input */
+
+/* Pragmata, Consolas, Monaco, "Andale Mono", "Bitstream Vera Sans Mono", monospace; */
+
+textarea {
+    font-family: 'PT Sans Narrow', 'Lekton', Courier, monospace;
+    line-height: 38px;
+    font-size:18px;
+    background: url(img/textarea_lines.png) top;
+    padding-top:10px;
+}
+
+textarea:focus {  outline: none; }
+
+#new-comment-form { width:700px; margin: 20px auto;}
+
+textarea.comment {
+    height: 200px;
+    border: none;
+}
+
+#new-comment-form .border .submit {
+    font-family: 'PT Sans Narrow', 'Lekton', Courier, monospace;
+    position:relative;
+    right:0;
+}
+
+
+
+/* login page */
+
+#login-screen {         margin: 30px auto 40px auto; width:960px; text-align: center;}
+/*#login-screen div {     display: table-cell; }*/
+.login-iframe {         margin-left: 0;    width: 390px;     }
+/*height:160px; }*/
+
+.janrainContent {       font-family: Helvetica, Arial, sans-serif;}
+.janrainSwitchAccountLink { padding: 10px 0 10px 0 !important; height: 10px; width:100% !important; background-color: #fff !important; display: block !important; }
+#janrain-facebook, #janrain-twitter, #janrain-google, #janrain-yahoo, #janrain-openid {     padding: 10px 0 10px 0 !important;}
+
+#janrainEngageEmbed { margin:0px auto; text-align: center;}
+#login-frame { width:100%; margin:0px auto; padding-top:15px; background: #FFF; border-bottom: 1px solid #E3E3E3 ;}
+/* end login page */
+.login-iframe { height: 160px;}
+
+/* join page */
+#join-form {  width:540px; margin: 20px auto;}
+#webocrat-join {  position: relative; right: 0px; }
+/* end join page */
+
+
+
+
+
+/* new hub form */
+#map_canvas {
+    width: 100%;
+    height: 500px;
+}
+
+#autolocation-box, #search-location-box {
+    display: table-cell;
+    width:480px;
+}
+#search-location-box input {
+    border: 1px solid;
+    background: none;
+    padding: 10px;
+    width: 410px;
+}
+
+#autolocation-box .al-button {
+    padding: 10px;
+    text-align: center;
+    background: #444;
+}
+/* end new hub form */
+
+
+
+
+
+.select-ego, .subscribe-ego, .trust-ego {    display: inline-block;     cursor: pointer;   }
+
+.trust-ego:hover, .select-ego:hover, .subscribe-ego:hover {
+    text-decoration: underline;
+}
+
+.separator {
+    margin-top:40px;
+    border-bottom: 2px #444 solid;
+}
+
+
+.hidden {
+    display: none !important;
+}

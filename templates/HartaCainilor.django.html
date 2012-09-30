@@ -1,0 +1,328 @@
+{% extends 'MainPage.django.html' %}
+{% block css %}
+    <link href="/css/hartacainilor.ro/hartacainilor.ro.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block cufon %}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="/js/dragdealer.js"></script>
+    <script type="text/javascript" src="/js/jquery.exif.js"></script>
+    <script type="text/javascript" src="/js/jquery.numeric.js"></script>
+    <script type="text/javascript" src="/js/jquery.watch.js"></script>
+
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&v=3.7&libraries=places"></script>
+    <script type="text/javascript" src="/js/gmap.js"></script>
+
+    <script type="text/javascript" src="/js/webocrat.js"></script>
+    <script type="text/javascript" src="/js/ImageUploader.js"></script>
+    <script type="text/javascript" src="/js/NewDogForm.js?c=1"></script>
+
+<!--<script type="text/javascript" src="http://www.google.com/jsapi"></script>-->
+
+
+
+<script type="text/javascript">
+
+//TODO: add demographics layer in webocrat
+//TASK:
+
+    var DogView = {
+        template : '',
+        Init : function() {
+            DogView.template = $("#dog-view").html();
+//            $("#dog-view").empty();
+
+        },
+        displayObject: function(id) {
+            //TODO : fetch object from dataStore
+            //TODO : server add:/m-dog -> map object
+
+            var theData = {
+                id : id
+            };
+            webocrat.service("hartacainilor.ro/mservice");
+            /*TODO : import the services in the main handler
+             when needed
+             action:
+           + a request is made to :sub.domain.tld/              # signed - public key is in the DNS
+           + webapp2 is processing the request
+               services are registered for all endpoints
+               Research: dynamic (DataStore) management of services and templates
+               Workaround : mustache, read template from div, then clear,
+                        protoRPC communication needs server side work anyway,
+                        so we only need to find a way to generate
+                            js DataMessages from protoRPC definitions
+            */
+            var request = $.ajax({
+                url: "/hc.dog",
+                data: JSON.stringify(theData),
+                success: DogView.loaded,
+                error: function(jqXHR, textStatus) {
+                    console.log( "Request failed: " + textStatus );
+                },
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/json'
+            });
+
+            $("#dog-view").show();
+        },
+        loaded : function(data) {
+            console.log("OK: Object Received:");
+            console.log(data.dog);
+            var html = Mustache.render(DogView.template, data);
+            $("#dog-view").html(html);
+
+        },
+        hidePanel: function() {
+            $("#dog-view").hide();
+        }
+
+    };
+
+
+    var default_zoom = parseInt('0{{ zoom }}');
+    var default_location = new google.maps.LatLng('0{{ lat }}', '0{{ lng }}');
+
+    var documentReady = function () {
+
+        var initMap = function() {
+            Map.Init(default_location, default_zoom);
+            NewDogForm.Init();
+            DogView.Init();
+            ImageUploader.Init(default_location);
+            MOM.setMap(Map.map);
+            MOM.Init("/hc");
+        };
+
+        setTimeout(initMap, 100);
+    };
+
+    $(document).ready(documentReady);
+
+
+    // MapObjectManager
+    var MOM = {
+        markerImages : [],
+        markers : [],
+        map : false,
+        endpoint : false,
+        Init : function (endpoint) {
+            var dogMarkerImage = new google.maps.MarkerImage(
+                    '/css/hartacainilor.ro/img/icon_dog1.png',
+                    new google.maps.Size(41,40),
+                    new google.maps.Point(0,0),
+                    new google.maps.Point(20,34));
+
+            MOM.markerImages.push(dogMarkerImage)
+            MOM.endpoint = endpoint;
+            MOM.loadMarkers();
+        },
+        setMap : function(map) {
+            MOM.map = map;
+            //TODO: register map.events handlers
+            //TODO: onChangeBounds -> loadMarkersForMap
+            //
+        },
+        loadMarkers : function() {
+            // ajax call to protoRPC backend
+            // 2 message objects
+            //  1 request, 1 response
+            /*
+                request : zoomlevel, region
+                response : markers array (clustered on the server)
+
+                todo: send tiles
+
+                markerMessage : {
+                    lat : float,
+                    lng : float,
+                    id : string,
+                    name : string,
+                    url : string,
+                    image : string,
+                    number : int
+                }
+             */
+
+            if (Map.map.getBounds() === undefined) {
+                // if the map is not loaded retry in 100 ms
+                setTimeout(MOM.loadMarkers, 100);
+                return;
+            }
+
+            var theData = {
+//               bounds: false
+                limit : 100,
+                rectangle : Map.map.getBounds().toString()
+            };
+
+            console.log("request:");
+            console.log(theData);
+
+            var request = $.ajax({
+                url: MOM.endpoint + ".get",
+                data: JSON.stringify(theData),
+                success: MOM.displayMarkers,
+                error: function(jqXHR, textStatus) {
+                    console.log( "Request failed: " + textStatus );
+                    console.log(jqXHR.responseText);
+                },
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/json'
+            });
+
+        },
+        displayMarkers : function(data) {
+            MOM.markers = new Array();
+            var objects = data.objects;
+            for (i in objects) {
+                var theDog = objects[i];
+                var location = theDog.location.split(',');
+                var theLatLng = new google.maps.LatLng(location[0], location[1]);
+                var theMarker = new google.maps.Marker({
+                    position: theLatLng,
+                    map: Map.map,
+                    icon: MOM.markerImages[0]}
+                );
+                theMarker.setMap(Map.map);
+                console.log(theMarker);
+                MOM.markers.push(theDog);
+            }
+            console.log(MOM.markers);
+        },
+        loadCommentsForMap : function() {
+            //ajax call to protoRPC backend
+            /*
+                request: zoomlevel, region,
+            */
+        }
+    };
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="login-frame" class="hidden">
+    <div id="janrainEngageEmbed" class="login-iframe"></div>
+</div>
+<div class="block">
+    <div id="header">
+        <div id="title"><h1>Harta câinilor</h1></div>
+        <div id="user">{{ user.ego.name }}</div>
+    </div>
+
+
+    <div id="harta-container">
+        <div id="mapborder">
+            <div id="map_canvas"></div>
+            <input type="text" id="location-search-box" name="location-search-box" value="" />
+            <div id="location-search-box-message">-</div>
+            <div id="adauga-un-caine-button" class="button-green step">Adaugă un câine</div>
+        </div>
+
+        <div id="dog-add" class="wpaper" style="display: none">
+            <!--<div id="name">-->
+                <!--<input type="text" name="target-name" id="target-name" maxlength="32" value="{{ user.ego.name }}" />-->
+            <!--</div>-->
+            <div class="step" id="upload-photo">
+                <p>Înainte de a adăuga un câine pe hartă, verifică dacă nu a fost înregistrat deja.</p>
+                <div id="photo-error-message" style="display: none"></div>
+                <div id="upload-image-button" class="button-gray">ÎNCARCĂ IMAGINEA</div>
+                <div class="hint">Se poate și cu drag & drop. <br/> Deocamdată doar în Chrome și Firefox</div>
+
+                <!--<p>Poti trimite imaginile cu geotag si prin email la report@hartacainilor.ro</p>-->
+                <!--<p>sau pe twitter: #hartacainilor</p>-->
+                <form style="position:absolute; visibility:hidden" class="upload-image-form" enctype="multipart/form-data" method="post" action="/image.upload">
+                    <input type="file" id="fileup" name="img" />
+                    <input type="hidden"  name="photo-id" value="{{ photo.key.id }}" />
+                </form>
+            </div>
+
+
+            <div class="step" id="crop-photo">
+                <!--<div class="number two"></div>-->
+                <div class="top-hint">Alege zona importantă din imagine. </div>
+                <div class="photo-container">
+                    <canvas id="cnvs" width='300' height='300'></canvas>
+                    <div id="photo">
+                        <div id="drag-image"></div>
+                    </div>
+                    <div id="zoom-slider-bg">
+                        <div id="zoom-slider" class="dragdealer">
+                            <div class="handle red-bar"></div>
+                            <div id="zoom-handle"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="upload-photo-button" class="button-green">TRIMITE</div>
+            </div>
+
+            <div class="step" id="hidden-space">
+                <!--<div class="photo-container" id="dog-view-canvas-container"></div>-->
+            </div>
+
+
+            <div class="step" id="select-location">
+                <div class="map-arrow"></div>
+                <div class="map-top-arrow"></div>
+                <div class="location-wait">Așteaptă ...</div>
+
+                <div class="hint">Verifică și confirmă locația pe hartă.</div>
+                <div class="hint">Poți să schimbi și numele câinelui.</div>
+                <div id="set-location-button" class="button-green">AICI</div>
+            </div>
+
+            <div class="step" id="confirm-location">
+                <div class="map-arrow"></div>
+                <div class="map-top-arrow"></div>
+                <div class="location-wait">Așteaptă ...</div>
+
+                <div id="dog-info">
+                    <div id="dog-icon"></div>
+                    <input id="dog-name" type="text" name="dogname" value="Petrică" />
+                    <div id="zona" class="hint">@zona</div>
+                </div>
+                <div class="hint">Verifică și confirmă locația pe hartă.</div>
+                <div class="hint">Poți să schimbi și numele câinelui.</div>
+                <div id="confirm-location-button" class="button-green">AICI</div>
+            </div>
+
+
+            <div id="goback-button">.</div>
+
+            <!--<div class="tc">-->
+                <!--<input type="text" class="text-input" name="nr-caini" id="nr-caini" value="1" autocomplete="off"  />-->
+            <!--</div>-->
+        </div>
+
+        <div id="dog-view" class="hidden">
+            render with moustache. load template and json from div, empty(), render in js
+            <a href="">{{ dog.owner.ego.name }}</a>:<br/>
+            {{ dog.added }}
+            <div class="step" id="send-new-dog-request">
+                <div id="cuminte" class="rate-dog-request-button button-rate-tag">CUMINTE</div>
+                <div id="agresiv" class="rate-dog-request-button button-rate-tag">AGRESIV</div>
+                <p>Poți șterge fotografia în urmatoarele 24 de ore.</p>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div id="comments" class="hidden">
+        <div class="comment">
+        </div>
+        <div class="comment">
+            <div id="owner">{{ user.ego.name }} / Date @ time</div>
+            <textarea rows="3" cols="40" type="text" name="subject" id="subject"></textarea>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

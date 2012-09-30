@@ -1,0 +1,87 @@
+{% extends 'Main.django.html' %}
+{% block javascript %}
+<script type="text/javascript" src="/js/dragdealer.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="/js/gmap.js"></script>
+<script type="text/javascript" src="/js/jquery.numeric.js"></script>
+
+<script type="text/javascript">
+    var default_location = new google.maps.LatLng({{ lat }}, {{ lng }});
+
+    function sendNewHubRequest() {
+        var lat = Map.theMarker.position.lat();
+        var lon = Map.theMarker.position.lng();
+        $("#lat").val(lat);
+        $("#lng").val(lon);
+
+        var theData = { name: $("#name").val(),
+                        location: (lat+","+lon)};
+        var request = $.ajax({
+            url: "/_h.new",
+            data: JSON.stringify(theData),
+            success: function(data) {
+                console.log("OK:" + data.id);
+            },
+            error: function(jqXHR, textStatus) {
+                console.log( "Request failed: " + textStatus );
+            },
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+
+    $(document).ready(function(){
+        $("#autolocation-box").click(function(event) { Map.autolocate(); });
+        hslider = false;
+
+
+        /* setup location search box */
+        ls = $("#location_search");
+        ls.keypress(function(event) { if (event.keyCode == '13') { event.preventDefault(); Map.findAddress(); }  });
+        ls.focusin(function (){ if (ls.val()=="Search ...") ls.val(""); });
+        ls.focusout(function (){ if (ls.val()=="") ls.val("Search ..."); });
+
+
+        $("#new-hub-button").mousedown(sendNewHubRequest);
+
+        var initMap = function() {
+            Map.Init(default_location,2);
+
+            Map.marker_image = '/css/map/map_hub.png';
+            Map.theMarker = new google.maps.Marker({
+                position: default_location,
+                map: Map.map,
+                icon: Map.marker_image,
+                title: '{{ hub.name }}',
+                draggable: false
+            });
+
+            Map.map.setCenter(default_location);
+        };
+
+        setTimeout(initMap, 200);
+    });
+
+</script>
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="content-block">
+<h1>{{ hub.name }}</h1>
+    <div id="join-hub-button" class="button-red">JOIN</div>
+    Block
+</div>
+
+<!-- start location -->
+    <div class="input-block">
+        <div id="mapborder"><div id="map_canvas"></div></div>
+    </div>
+<!-- end location -->
+
+{% endblock %}

@@ -1,0 +1,117 @@
+application: webocrat-com-hdr
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+default_expiration: "14d"
+
+libraries:
+- name: django
+  version: "1.2"
+
+builtins:
+- appstats: on
+
+
+handlers:
+# - - - - - - -
+# services
+# - - - - - - -
+- url: /hc.*
+  script: services.the_services.HartaCainilor
+
+- url: /h-.*
+  script: services.the_services.hub
+
+- url: /e-.*
+  script: services.the_services.ego
+
+- url: /comment.*
+  script: services.the_services.comment
+
+# - - -
+# login
+# - - -
+- url: /(welcome|hello|logout|rpx)
+  script: py.login.app
+
+
+
+# - - - - - - -
+# hubs
+# - - - - - - -
+# :/hub/new
+# :/223.hub | 223.hub
+# :/hubs
+
+- url: (/hub/new|/.*.hub|/hubs)
+  script: py.hub_handler.app
+
+#- url: /hubs
+#  script: py/hubs.py
+#- url: /(hub.(.*)/(.*)|hub.(.*))
+#  script: py/hub.py
+#
+#- url: /new.hub
+#  script: py/new_hub.py
+
+
+
+- url: /developer_bar
+  script: py.developer_bar.app
+
+
+# - - - - - - -
+# user pictures
+# - - - - - - -
+- url: (/img/.*|/image.upload)
+  script: py.user_pictures.app
+
+
+
+# - - - - - - -
+# looks
+# - - - - - - -
+- url: /css
+  static_dir: css
+  expiration: "1s"
+
+- url: /js
+  static_dir: js
+  expiration: "1s"
+
+- url: /favicon.ico
+  static_files: css/img/favicon.ico
+  upload: css/img/favicon.ico
+
+- url: /(.*\.(gif|png|jpg))
+  static_files: static/\1
+  upload: static/(.*\.(gif|png|jpg))
+
+# static pages
+#- url: /privacy
+#  script: py/static.py
+
+- url: /(.*)
+  script: py.main.app
+
+
+
+
+
+
+error_handlers:
+  - file: default_error.html
+
+  - error_code: over_quota
+    file: over_quota.html
+
+  - error_code: dos_api_denial
+    file: dos.html
+
+
+admin_console:
+  pages:
+  - name: Blacklist Suspects
+    url: /blacklist_suspect/

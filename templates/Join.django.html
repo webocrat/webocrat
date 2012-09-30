@@ -1,0 +1,105 @@
+{% extends 'MainPage.django.html' %}
+{% block css %}
+<!--<link href="/css/dragdealer.css" rel="stylesheet" type="text/css" />-->
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+  var counterValue = {{ hub.count }};
+  var counterSpeed = {{ hub.per_minute }};
+</script>
+<script type="text/javascript" src="/js/counter.js"></script>
+
+<script type="text/javascript">
+
+  function sendForm() {
+      //TODO: check name
+      //TODO: check valid email
+      return true;
+  }
+
+
+  $(document).ready(function(){
+	  
+//	  /*name bubble */
+//
+//	  ni = $("#name");
+//	  ni.keypress(function(event) {
+//	    if (event.keyCode == '13') { event.preventDefault(); }
+//	    });
+//	  ni.focusin(function (){
+//	    if (ni.val()=="Name") ni.val("");
+//	    $("#name-bubble").animate({opacity:1}, 30, function() {});
+//	  });
+//	  ni.focusout(function (){
+//	    if (ni.val()=="") ni.val("Name");
+//	    $("#name-bubble").animate({opacity:0}, 100, function() {});
+//	  });
+//
+//	  /* email bubble */
+//
+//	  ei = $("#email");
+//	  ei.keypress(function(event) { if (event.keyCode == '13') { event.preventDefault(); }});
+//	  ei.focusin(function (){
+//	    $("#email-bubble").animate({opacity:1}, 30, function() {});
+//	  });
+//	  ei.focusout(function (){
+//	    $("#email-bubble").animate({opacity:0}, 100, function() {});
+//	  });
+
+	  
+	  $("#join-form").submit(function() { return sendForm();});
+	  $("#webocrat-join").mousedown( function() {     $("#join-form").submit(); });
+	  
+   });
+</script>
+{% endblock %}
+
+
+
+
+
+
+{% block menu %}
+{% endblock %}
+
+
+{% block content %}
+  
+{% if show_invitation %}
+{% include 'invite.django.html' %}
+{% endif %}
+
+<!-- start Join Form -->
+
+<div class="block">
+
+    <form id="join-form" name="join-form" method="post" action="/hello">
+        <div class="border">
+
+            <div class="centered">    <div id="webocrat-logo" style="height:204px;margin-top:-40px"></div> </div>
+
+            <!-- start display name -->
+            <h2>FULL NAME</h2>
+
+            <input class="input-text" type="text" name="name" id="name" value="{{ name }}" /><div class="ic"></div>
+            <div class="info">This is your public name, that everyone will see.</div>
+            <!-- end display name -->
+            <br/>
+            <!-- start email -->
+            <h2>EMAIL ADDRESS</h2>
+
+            <input class="input-text" type="text" name="email" id="email" value="{{ email }}"/><div class="ic"></div>
+            <div class="info">Your privacy is our top priority. Your email is safe with us.</div>
+            <!-- end email -->
+        <br/>
+
+        <div id="webocrat-join" class="button"><h1>JOIN</h1></div>
+
+        </div>
+    </form>
+<!-- end Join Form -->
+
+
+
+{% endblock %}

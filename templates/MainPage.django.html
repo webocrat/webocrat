@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="copyright" CONTENT="webocrat" />
+    <meta name="viewport" content="initial-scale=1; user-scalable=1;">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <title>webocrat {{ page_title }}</title>
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow|Lekton:400,700|Oleo+Script" rel="stylesheet" type="text/css">
+    <link href="/css/webocrat.css" rel="stylesheet" type="text/css" />
+
+    {% block css %}
+    {% endblock %}
+
+    <script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-1.8.18.custom.js"></script>
+    <script type="text/javascript" src="/js/jquery.autogrowtextarea.js"></script>
+    <script type="text/javascript" src="/js/mustache.js"></script>
+    <script type="text/javascript">
+        var user_access_token = '{{ user.token }}';
+        var user_id = "{{ user.key.id }}";
+        var ego_id = "{{ user.ego.key.id }}";
+        var isLoggedIn = "{{ user }}";
+    </script>
+    {% block cufon %}
+    <script src="/js/cufon-yui.js"></script>
+    <script src="/js/Bebas_Neue_400.font.js"></script>
+    <script type="text/javascript">
+        Cufon.set('fontFamily', 'Bebas Neue');
+        Cufon.replace('h1,h2');
+    </script>
+    {% endblock %}
+
+    {% block jslogin %}
+
+    {% if not user %}
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            janrain.ready = true;
+            clearBorder = function() {
+                // ugly hack - remove when moving to production and pay janrain
+                var jc = $(".janrainContent");
+                jc.attr("style","width:390px; height:156px; box-sizing:content-box; position:relative");
+                $(".janrainHeader").remove();
+                var ccc = $("#janrainProviderPages").next();
+                ccc.remove();
+            };
+            setTimeout(clearBorder, 500);
+
+            if (isLoggedIn == "None") {
+                $("#login-frame").removeClass("hidden");
+            }
+        });
+
+
+        (function() {
+            if (typeof window.janrain !== 'object') window.janrain = {};
+            window.janrain.settings = {};
+            janrain.settings.tokenUrl = 'http://{{ BASE_URL }}/rpx';
+
+//    function isReady() { janrain.ready = true; }
+//    if (document.addEventListener) {
+//        document.addEventListener("DOMContentLoaded", isReady, false);
+//    } else {
+//        window.attachEvent('onload', isReady);   }
+
+            var e = document.createElement('script');
+            e.type = 'text/javascript';
+            e.id = 'janrainAuthWidget';
+
+            if (document.location.protocol === 'https:') {
+                e.src = 'https://rpxnow.com/js/lib/webocrat/engage.js';
+            } else {
+                e.src = 'http://widget-cdn.rpxnow.com/js/lib/webocrat/engage.js'; }
+
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(e, s);
+        })();
+    </script>
+    {% endif %}
+
+    {% endblock %}
+
+
+    {% block javascript %}
+    {% endblock %}
+
+</head>
+<body>
+{% if s.message %}<div id="message">s.message</div> {% endif %}
+
+<div id="plus">
+<!--<iframe src="http://www.facebook.com/plugins/like.php?app_id=253683224645077&amp;href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FWebocrat%2F210571752318446&amp;send=false&amp;layout=box_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=90" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:60px" allowTransparency="true"></iframe>-->
+<!--<g:plusone size="tall"></g:plusone>-->
+</div>
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+<div class="block">
+    <!--<a href="/">webocrat</a> |-->
+    <!--<a href="/hub/new">New Hub</a> |-->
+    <!--<a target="_blank" href="/privacy">Privacy policy</a>-->
+</div>
+{% endblock %}
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-258687-26']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+</body> 
+</html> 

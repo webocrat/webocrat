@@ -1,0 +1,16 @@
+{{ hubs_title }}
+<div class="row">
+{% for hub in hubs %}
+        <div class="third">
+            <div id="hub-{{ hub.key.id }}" class="hub">
+                <h1>{{ hub.display_name }}</h1>
+                <img src="" width="300" height="150" />
+                <a href="/hub.{{ hub.key.id }}">{{ hub.display_name }}</a> ({{ hub.members }})
+            </div>
+        </div>
+    {% cycle '' '' '</div><div class="row">' as newrow silent %}
+    {{ newrow }}
+{% empty %}
+No Hubs
+{% endfor %}
+</div>

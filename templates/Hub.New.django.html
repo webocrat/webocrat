@@ -1,0 +1,126 @@
+{% extends 'MainPage.django.html' %}
+{% block javascript %}
+<script type="text/javascript" src="/js/dragdealer.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="/js/gmap.js"></script>
+<script type="text/javascript" src="/js/jquery.numeric.js"></script>
+
+<script type="text/javascript">
+    var default_location = new google.maps.LatLng({{ lat }}, {{ lng }});
+
+    function sendNewHubRequest() {
+        var lat = Map.theMarker.position.lat();
+        var lon = Map.theMarker.position.lng();
+        $("#lat").val(lat);
+        $("#lng").val(lon);
+
+        var theData = { name: $("#name").val(),
+                        location: lat+","+lon
+                        };
+        console.log(JSON.stringify(theData));
+        var request = $.ajax({
+            url: "/h-new",
+            data: JSON.stringify(theData),
+            success: function(data) {
+                console.log("OK:" + data.id);
+                window.location.href = "/"+data.id+".hub";
+            },
+            error: function(jqXHR, textStatus) {
+                console.log( "Request failed: " + textStatus );
+            },
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+
+    $(document).ready(function(){
+        $("#autolocation-box").click(function(event) { Map.autolocate(); });
+        hslider = false;
+
+
+        /* setup location search box */
+        ls = $("#location_search");
+        ls.keypress(function(event) { if (event.keyCode == '13') { event.preventDefault(); Map.findAddress(); }  });
+        ls.focusin(function (){ if (ls.val()=="Search ...") ls.val(""); });
+        ls.focusout(function (){ if (ls.val()=="") ls.val("Search ..."); });
+
+
+        $("#new-hub-button").mousedown(sendNewHubRequest);
+
+        var initMap = function() {
+            Map.Init(default_location,2);
+
+            Map.marker_image = '/css/map/map_hub.png';
+            Map.theMarker = new google.maps.Marker({
+                position: default_location,
+                map: Map.map,
+                icon: Map.marker_image,
+                title: 'hub center',
+                draggable: true
+            });
+
+            Map.map.setCenter(default_location);
+        };
+
+        setTimeout(initMap, 200);
+    });
+
+</script>
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="block">
+
+    <div class="input-block">
+        <div id="title" class="tab">New Hub</div>
+
+
+
+<!-- start name -->
+    <div class="input-block">
+        <div class="tab title">HUB NAME</div>
+        <div class="b tab">
+            <input class="input-text" type="text" name="name" id="name" value="" />
+        </div>
+    </div>
+<!--</div>-->
+
+
+<!-- start location -->
+    <div class="input-block">
+        <input type="hidden" id="lat" name="lat" value="{{ lat }}" />
+        <input type="hidden" id="lng" name="lng" value="{{ lng }}" />
+        <div id="title">Location</div>
+
+        <div class="b tab">
+            <div id="search-location-box">
+                <input class="input-text" type="text" name="location_search" id="location_search" value="Search ..." />
+                <br />
+                <small>Enter Country, City or Street. Press Enter.</small>
+            </div>
+
+            <div id="autolocation-box">
+                <div class="al-button-shadow"></div>
+                <div class="al-button">Autodetect Location</div>
+                <small>You can try autodetecting your location.</small>
+            </div>
+        </div>
+        <div id="mapborder"><div id="map_canvas"></div></div>
+
+
+    </div>
+<!-- end location -->
+
+        <div class="input-block">
+            <div id="new-hub-button" class="button-red">CREATE HUB</div>
+        </div>
+    </div>
+ </div>
+
+{% endblock %}

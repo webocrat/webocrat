@@ -1,0 +1,347 @@
+@import url("/css/webocrat.css");
+
+h1 {
+    font-family: 'Oleo Script', cursive;
+    font-weight: normal;
+    text-shadow: #FFF 0 -1px 0;
+    color: #474747;
+}
+
+h1.center {
+    text-align: center;
+}
+
+#header {
+    padding-top:10px;
+    height: 70px;
+    display: inline-block;
+    width: 100%;
+}
+
+#header #title {
+    display: table-cell;
+    width: 760px;
+}
+
+#header #user {
+    display: table-cell;
+    text-align: right;
+    width: 200px;
+    padding-right: 20px;
+}
+
+
+
+/* map */
+#harta-container {
+    position: relative;
+}
+
+#map-border {
+    position: relative;
+}
+
+#map_canvas {
+    width: 100%;
+    height: 500px;
+}
+
+
+#location-search-box {
+    position: absolute;
+    margin-left:-50px;
+    width: 150px;
+    top:0;
+    left:50%;
+}
+
+#map_canvas.narrow {
+    margin-right: 160px;
+    width: 665px;
+}
+
+
+
+
+
+
+
+
+
+
+#dog-view {
+    width: 450px;
+    display: inline-block;
+}
+
+#dog-add {
+    padding: 20px;
+    position: absolute;
+    top:0;
+    background: #FFF;
+    width: 255px;
+    right: 0;
+}
+
+
+#error-file-format, #error-small-image {
+    width: 300px;
+    height: 300px;
+    background: url(img/error_file_format.png);
+}
+
+
+
+
+
+
+/* buttons*/
+
+.button-green-right {
+    margin-left:auto;
+    margin-right:0;
+}
+
+.button-green, .button-gray {
+    height:40px;
+    background-color: #96bb03;
+    background-repeat:no-repeat;
+    cursor:pointer;
+
+    color:#FFF;
+    padding: 6px;
+    padding-top: 8px;
+    font-size: 22px;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: #426e02 0 -1px 0;
+
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.button-green:hover {
+    background-color: #9ec504;
+    text-shadow: #87a804 0 -1px 0;
+    background-position:0 -80px;
+}
+
+.button-gray {
+    background-color: #474747;
+}
+
+
+
+
+
+
+#adauga-un-caine-button {
+
+    width: 160px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    float:right;
+    height: 40px;
+    /*position: absolute;*/
+}
+
+#new-dog-button {
+    width: 120px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+.wpaper {
+    background: url(img/wpaper.jpg) repeat;
+    box-shadow: 0 5px 21px rgba(0,0,0,0.17);
+    -moz-box-shadow: 0 5px 21px rgba(0,0,0,0.17);
+    -webkit-box-shadow: 0 5px 21px rgba(0,0,0,0.17);
+}
+
+
+.step {
+    height: 460px;
+}
+
+
+#confirm-location, #select-location {
+    padding-top: 100px;
+    height: 360px;
+}
+
+#upload-photo-button, #set-location-button, #confirm-location-button {
+    width: 100px;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.map-arrow {
+    background: url(img/map_arrow.png) no-repeat;
+    width: 330px;
+    height: 60px;
+    position: absolute;
+    left: -330px;
+    top: 220px;
+    z-index: 100;
+}
+
+.map-top-arrow {
+    background: url(img/map_top_arrow.png) no-repeat;
+    width: 148px;
+    height: 164px;
+    position: absolute;
+    left: 105px;
+    top: -54px;
+    z-index: 100;
+}
+
+
+
+
+
+
+
+#upload-image-button {
+    /*position: absolute;*/
+    width: 200px;
+
+    margin:10px auto 10px auto;
+    cursor: pointer;
+    z-index: 30;
+}
+
+#upload-image-button:hover {
+
+}
+
+
+#dog-info {
+    border-top:#f5f5f5 2px solid;
+    border-bottom: #f5f5f5 2px solid;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    margin-top: 25px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+#dog-icon {
+    background: url(img/icon_dog1.png) no-repeat;
+    width: 40px;
+    height: 41px;
+    display: inline-block;
+    /*margin: 0 auto;*/
+}
+
+#dog-name {
+    border: none;
+    text-align: center;
+    width:100%;
+    font-family: 'PT Sans Narrow',sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.hint {
+    text-align: center;
+    color: #999;
+}
+
+.top-hint {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+
+#goback-button {
+    text-decoration: underline;
+    /*font-size: 18px;*/
+    color: #999;
+    position: absolute;
+    bottom: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+#goback-button:hover {
+    color:#333;
+}
+
+
+#photo-error-message {
+    background: #fcf357;
+    text-align: center;
+    padding: 5px;
+}
+
+
+
+
+/*photo container*/
+
+.photo-container {
+    width:300px;
+    height:300px;
+    position:relative;
+    margin-left:-38px;
+    margin-top:-5px;
+    margin-bottom:-10px;
+    background-image:url(img/border300.png);
+    display:inline-block;
+    padding:16px;
+}
+
+
+.photo-container #photo {
+    width:300px;
+    height:300px;
+    overflow: hidden;
+    clip: rect(0,300px,300px,0);
+    position: absolute;
+    left: 16px;
+    top:16px;
+    cursor:move;
+}
+
+
+
+.photo-container .upload-image-form {
+    position: absolute;
+}
+
+.photo-container #zoom-slider-bg {
+    position: absolute;
+    width: 345px;
+    bottom: -15px; left: -11px;
+    z-index: 25;
+    height: 51px;
+    background-image:url(img/zoom_ruler.png);
+    visibility: hidden;
+}
+
+.photo-container #zoom-slider-bg #zoom-slider.dragdealer {
+    height: 51px;
+    position: absolute;
+    width: 280px;
+    margin-left:55px;
+}
+
+#zoom-slider .red-bar {
+    position: absolute;
+    cursor: pointer;
+    width: 30px;		height: 51px;
+    margin: 0;
+    background-image:url(img/zoom_ruler.png);
+    background-position: -464px 0;
+    background-repeat:no-repeat;
+}
+
+
+#drag-image {
+    position: absolute;
+}

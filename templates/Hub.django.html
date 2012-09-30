@@ -1,0 +1,57 @@
+{% extends 'MainPage.django.html' %}
+{% block css %}
+<!--<link href="/css/dragdealer.css" rel="stylesheet" type="text/css" />-->
+{% endblock %}
+
+{% block javascript %}
+<!--<script type="text/javascript" src="/js/dragdealer.js"></script>-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="/js/gmap.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $("#autolocation-box").click(function(event) { autolocate(); });
+
+        /* setup location search box */
+        ls = $("#location_search");
+        ls.keypress(function(event) { if (event.keyCode == '13') { event.preventDefault(); findAddress(); }  });
+        ls.focusin(function (){ if (ls.val()=="Search ...") ls.val(""); });
+        ls.focusout(function (){ if (ls.val()=="") ls.val("Search ..."); });
+
+        $("#new-hub-form").submit(function() { return sendForm();});
+	    $("#new-hub").mousedown( function() {     $("#new-hub-form").submit(); });
+
+	  setTimeout("initialize_map()",1000);
+
+    });
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+<div class="block">
+
+<form>
+    <h1>{{ hub.ego.display_name }}</h1>
+    <br/>
+    <div id="connect-to-hub" class="button"><h1>CONNECT</h1></div>
+    <div class="border">
+
+        <!-- start location -->
+        <input type="hidden" id="lat" name="lat" value="{{ lat }}"/>
+        <input type="hidden" id="lng" name="lng" value="{{ lng }}"/>
+
+        <div id="mapborder">
+            <div id="map_canvas"></div>
+        </div>
+        <!-- end location -->
+
+        <br/>
+        <br/>
+
+
+    </div>
+</form>
+</div>
+{% endblock %}

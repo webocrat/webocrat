@@ -1,0 +1,105 @@
+{% extends 'MainPage.django.html' %}
+{% block css %}
+<!--<link href="/css/dragdealer.css" rel="stylesheet" type="text/css" />-->
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="/js/gmap.js"></script>
+
+<script type="text/javascript">
+
+    var default_location = new google.maps.LatLng(0{{ lat }}, 0{{ lng }});
+
+    var HubsView = {
+        target: 'call HubsView.Init("#div_id")',
+        ego_id: '{{ theEgo.key.id }}', //'select an ego'
+        Init: function(selector) {
+            target = $(selector);
+            HubsView.ShowHubs();
+        },
+        ShowHubs : function() {
+            var theData = {
+                'action': 'show',
+                'tiles': '123|442',
+                'ego_id' : HubsView.ego_id
+            };
+            target.load('/h-',theData, HubsView.Loaded); //should serve only to trusted & allowed viewers
+        },
+        Loaded : function(e) {
+            //TODO: clear markers from map
+            //TODO: add hubs to map
+        }
+    };
+
+    var EgosView = {
+        target: 'call EgosView.Init("#div_id")',
+        Init : function(selector) {
+            target = $(selector);
+            EgosView.ShowEgos();
+        },
+        get_id: function(e) {
+          return $(e.target).parent().attr('id').replace('ego-','');
+        },
+        ShowEgos: function () {
+            var theData = {
+                'action': 'show'
+            };
+            target.load('/developer_bar',theData, EgosView.Loaded); //should serve only to trusted & allowed viewers
+        },
+        Loaded: function() {
+            // attach js function to
+            $(".select-ego").unbind().click(EgosView.LoadEgo);
+            $(".trust-ego").unbind().click(EgosView.TrustEgo);
+        },
+        LoadEgo: function(e) {
+            var ego_id = EgosView.get_id(e);
+            alert(ego_id);
+        },
+        TrustEgo: function(e) {
+            var ego_id = EgosView.get_id(e);
+            var trust = $(e.target).attr('trust');
+            var theData = {
+                'target_ego_id': ego_id,
+                'trust': trust
+            };
+            var url = '/e-';
+            $(e.target).load(url, theData, EgosView.Loaded);
+        }
+    };
+
+
+    var documentReady = function () {
+        HubsView.Init("#hubs-view");
+        EgosView.Init("#egos-view");
+
+        var initMap = function() {
+            Map.Init(default_location,3);
+        };
+
+        setTimeout(initMap, 100);
+    };
+
+    $(document).ready(documentReady);
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="block">
+    <div id="webocrat-logo" class="logoup"></div>
+
+    <div id="mapborder">
+       <div id="map_canvas"></div>
+    </div>
+
+    <div id="hubs-view">
+        <h1>Hubs</h1>
+    </div>
+
+    <div id="egos-view">
+        <h1>Egos</h1>
+    </div>
+
+</div>
+{% endblock %}
